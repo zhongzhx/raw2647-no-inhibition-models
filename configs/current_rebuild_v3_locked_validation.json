@@ -1,0 +1,129 @@
+{
+  "protocol_name": "RAW264.7 current-data rebuild v3 locked internal validation",
+  "created_date": "2026-07-28",
+  "data": "outputs/rebuild_current_20260727/graph_dataset_family/processed_graphs.pt",
+  "review_csv": "outputs/rebuild_current_20260727/graph_dataset_family/processed_index.csv",
+  "checkpoint": "outputs/rebuild_current_20260727/pretraining_gine_5x256/gine_encoder_best.pt",
+  "pretraining_summary": "outputs/rebuild_current_20260727/pretraining_gine_5x256/pretraining_summary.json",
+  "output_dir": "outputs/rebuild_current_20260727/downstream_locked_validation",
+  "locked_split": {
+    "method": "StratifiedGroupKFold",
+    "n_splits": 5,
+    "shuffle": true,
+    "random_state": 20260727,
+    "locked_fold": 0,
+    "group": "scaffold_group"
+  },
+  "assignment_seeds": [
+    101,
+    203,
+    307,
+    409,
+    503
+  ],
+  "model_seeds": [
+    13,
+    42,
+    2026
+  ],
+  "outer_folds": 5,
+  "inner_folds": 4,
+  "training": {
+    "epochs": 60,
+    "patience": 8,
+    "min_delta": 0.0001,
+    "batch_size": 64,
+    "encoder_hidden_dim": 256,
+    "encoder_layers": 5,
+    "encoder_dropout": 0.18,
+    "graph_head_hidden_dim": 256,
+    "hybrid_branch_dim": 96,
+    "direct_concat_head_hidden_dim": 128,
+    "gated_head_hidden_dim": 512,
+    "head_dropout": 0.25,
+    "head_lr": 0.0005,
+    "common_encoder_lr": 0.0001,
+    "warmup_epochs": 2,
+    "min_lr_ratio": 0.05,
+    "weight_decay": 0.003,
+    "grad_clip": 2.0,
+    "classification_threshold": 0.5,
+    "device": "mps"
+  },
+  "traditional_models": {
+    "n_estimators": 500,
+    "min_samples_leaf": 2,
+    "svm_C": 2.0
+  },
+  "sample_weight_policy": {
+    "exact_ic50": 1.0,
+    "nd": 1.0,
+    "explicit_gt_50_uM": 1.0,
+    "ambiguous_right_censored": 0.8,
+    "evaluation_is_unweighted": true
+  },
+  "model_feature_policy": {
+    "A0_A1": "GINE only",
+    "A2_A7": "GINE+RDKit+Morgan+MACCS; family dimension 0",
+    "A8": "A3 plus 100-dimensional scaffold-family one-hot",
+    "T1_T2": "RDKit+Morgan+MACCS",
+    "T3_T4": "RDKit",
+    "BEST_candidates": [
+      "A0",
+      "A1",
+      "A2",
+      "A3",
+      "T1",
+      "T2",
+      "T3",
+      "T4"
+    ],
+    "activity_labels_used_to_assign_family": false
+  },
+  "fusion_policy": {
+    "base_models": [
+      "A3",
+      "T1"
+    ],
+    "alpha_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ],
+    "selection_order": [
+      "pr_auc_desc",
+      "brier_asc",
+      "distance_to_0_5_asc"
+    ],
+    "validation_crossfit_folds": 5,
+    "validation_crossfit_group": "scaffold_group"
+  },
+  "statistics": {
+    "cluster_bootstrap_repetitions": 2000,
+    "bootstrap_seed": 20260727,
+    "primary_pr_auc_comparisons": [
+      "A1_Pretrained_GINE_vs_A0_Scratch_GINE",
+      "A3_GatedFusion_vs_A2_DirectConcat",
+      "F0_DevelopmentOOFFrozen_vs_PreselectedBEST_T3"
+    ]
+  },
+  "failure_policy": "Fail closed; cache every completed fold; never omit or replace a failed task with an old result."
+}

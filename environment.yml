@@ -1,0 +1,8 @@
+name: raw2647-molecular-diversity
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.13,<3.14
+  - pip
+  - pip:
+      - -r requirements.txt
